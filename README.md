@@ -45,8 +45,8 @@ Antes de atravessar, olhe para os dois lados! Esse é o Bold Road, um jogo desen
     bpmg@cesar.school 📩
   </li>
   <li>
-    <a href="https://github.com/bielabs">Gabriel Araujo</a> -
-    gabs@cesar.school 📩
+    <a href="https://github.com/MiguelArcanjoo">Miguel Arcanjo</a> -
+    maha@cesar.school 📩
   </li>
   <li>
     <a href="https://github.com/pedromb2005">Pedro Barreto</a> -
@@ -65,10 +65,10 @@ Antes de atravessar, olhe para os dois lados! Esse é o Bold Road, um jogo desen
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/bielabs">
-        <img src="https://avatars.githubusercontent.com/bielabs" width="100px;" alt="Foto de Gabriel"/><br>
+      <a href="https://github.com/MiguelArcanjoo">
+        <img src="https://avatars.githubusercontent.com/MiguelArcanjoo" width="100px;" alt="Foto de Miguel"/><br>
         <sub>
-          <b>Gabriel Araujo</b>
+          <b>Miguel Arcanjo</b>
         </sub>
       </a>
     </td>
