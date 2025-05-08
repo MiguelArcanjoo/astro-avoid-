@@ -28,7 +28,7 @@ Antes de atravessar, olhe para os dois lados! Esse é o Bold Road, um jogo desen
 
 ## 🏁 *Como jogar*
 ### Passo 1:
-- Clonar esse repositório : git clone https://github.com/bielabs/bold-road.git
+- Clonar esse repositório : git clone (https://github.com/MiguelArcanjoo/astro-avoid-)
 ### Passo 2:
 - Navegar até o diretório do jogo (o caminho pode precisar de ajuste): cd bold-road
 ### Passo 3:
