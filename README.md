@@ -2,7 +2,8 @@
 
 <img src="Capa_BOLD-ROAD.jpeg">
 
-![Linguagem](https://img.shields.io/badge/linguagem-C-blue)
+![Linguagem](![image](https://github.com/user-attachments/assets/1d9f5a0e-9d87-4744-855e-3ea5c88ce351)
+)
 
 ## *Descrição*
 Antes de atravessar, olhe para os dois lados! Esse é o Bold Road, um jogo desenvolvido totalmente em linguagem C. Nele, o jogador controla um personagem cujo objetivo é atravessar a rua. Porém, cuidado! Nela, passam diferentes tipos de automóveis, muitas vezes em alta velocidade, seja da esquerda para a direita ou da direita para a esquerda. Conforme o jogador passa de fase, a velocidade e a quantidade de automóveis aumenta, dificultando mais a passagem do pedestre nessa rua tão moviemntada!
