@@ -2,7 +2,7 @@
 
 <img src="Capa_BOLD-ROAD.jpeg">
 
-![Linguagem](![image](https://github.com/user-attachments/assets/1d9f5a0e-9d87-4744-855e-3ea5c88ce351)
+![Linguagem](https://img.shields.io/badge/linguagem-C-blue)
 )
 
 ## *Descrição*
