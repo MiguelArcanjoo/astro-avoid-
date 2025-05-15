@@ -1,15 +1,28 @@
-/**
- * screen.h
- * Created on Aug, 23th 2023
- * Author: Tiago Barros
- * Based on "From C to C++ course - 2002"
- * Reference: https://en.wikipedia.org/wiki/ANSI_escape_code
-*/
-
 #ifndef __SCREEN_H__
 #define __SCREEN_H__
 
 #include <stdio.h>
+
+#define ALTURA_TELA 25
+#define LARGURA_TELA 80
+
+/**
+ * Screen Colors type — precisa vir antes de qualquer uso
+ */
+typedef enum {
+    BLACK, RED, GREEN, BROWN, BLUE, MAGENTA, CYAN, LIGHTGRAY,
+    DARKGRAY, LIGHTRED, LIGHTGREEN, YELLOW, LIGHTBLUE, 
+    LIGHTMAGENTA, LIGHTCYAN, WHITE
+} screenColor;
+
+// Funções da tela
+void desenharEspaco();
+void desenharHUD(int nivel, int vidas);
+void screenInit(int drawBorders);
+void screenDestroy();
+void screenGotoxy(int x, int y);
+void screenSetColor(screenColor fg, screenColor bg);
+void screenDrawBorders();
 
 // Terminal control sequences
 #define ESC            "\033"
@@ -43,139 +56,59 @@
 #define BOX_DOT        0x7E
 
 // screen constants
-#define SCRSTARTX      3      // Initial and final screen positions for the game
-#define SCRENDX        75     // It means the area that can be drawn 
+#define SCRSTARTX      3
+#define SCRENDX        75
 #define SCRSTARTY      1
 #define SCRENDY        23
+#define MINX           1
+#define MINY           1
+#define MAXX           80
+#define MAXY           24
 
-#define MINX           1      // min screen horizontal pos
-#define MINY           1      // min screen vertical pos
-#define MAXX           80     // max screen horizontal pos
-#define MAXY           24     // max screen vertical pos
-
-/**
- * Screen Colors type
-*/
-typedef enum {BLACK, RED, GREEN, BROWN, BLUE, MAGENTA, CYAN, LIGHTGRAY,
-        DARKGRAY, LIGHTRED, LIGHTGREEN, YELLOW, LIGHTBLUE, 
-        LIGHTMAGENTA, LIGHTCYAN, WHITE} screenColor; 
-
-
-
-/**
- * Move the cursor to position (0,0)
-*/
-static inline void screenHomeCursor()
-{
+// Inline screen helpers
+static inline void screenHomeCursor() {
     printf("%s%s", ESC, HOMECURSOR);
 }
 
-/**
- * Show the cursor
-*/
-static inline void screenShowCursor()
-{
+static inline void screenShowCursor() {
     printf("%s%s", ESC, SHOWCURSOR);
 }
 
-/**
- * Hide the cursor
-*/
-static inline void screenHideCursor()
-{
+static inline void screenHideCursor() {
     printf("%s%s", ESC, HIDECURSOR);
 }
 
-/**
- * Clear the screen
-*/
-static inline void screenClear()
-{
+static inline void screenClear() {
     screenHomeCursor();
     printf("%s%s", ESC, CLEARSCREEN);
 }
 
-/**
- * Update screen imediatelly 
-*/
 static inline void screenUpdate() {
     fflush(stdout);
 }
 
-/**
- * Set screen mode to "normal"
-*/
-static inline void screenSetNormal()
-{
+static inline void screenSetNormal() {
     printf("%s%s", ESC, NORMALTEXT);
 }
 
-/**
- * Set screen mode to "bold"
-*/
-static inline void screenSetBold()
-{
+static inline void screenSetBold() {
     printf("%s%s", ESC, BOLDTEXT);
 }
 
-/**
- * Set screen mode to "blink"
-*/
-static inline void screenSetBlink()
-{
+static inline void screenSetBlink() {
     printf("%s%s", ESC, BLINKTEXT);
 }
 
-/**
- * Set screen mode to "reverse"
-*/
-static inline void screenSetReverse()
-{
+static inline void screenSetReverse() {
     printf("%s%s", ESC, REVERSETEXT);
 }
 
-/**
- * Enable BOX characters in terminal
-*/
-static inline void screenBoxEnable()
-{
+static inline void screenBoxEnable() {
     printf("%s%s", ESC, BOX_ENABLE);
 }
 
-/**
- * Disable BOX characters in terminal
-*/
-static inline void screenBoxDisable()
-{
+static inline void screenBoxDisable() {
     printf("%s%s", ESC, BOX_DISABLE);
 }
-
-/**
- * Clear the screen, set cursor to home position
- * and optionally draw borders on it.
- * 
- * @param drawBorders if not zero, draw borders on screen.
-*/
-void screenInit(int drawBorders);
-
-/**
- * Clear the screen and restores to initial state.
-*/
-void screenDestroy();
-
-/**
- * Move cursor to position (x,y)
- * @param x x position
- * @param y y position
- */ 
-
-void screenGotoxy(int x, int y);
-
-/**
- * Define text colors 
- * @param fg foreground color, can assume values from BLACK to WHITE
- * @param bg background color, can assume values from BLACK to LIGHTGRAY
-*/
-void screenSetColor(screenColor fg, screenColor bg);
 
 #endif /* __SCREEN_H__ */

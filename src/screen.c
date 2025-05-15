@@ -6,10 +6,17 @@
 */
 
 #include "screen.h"
+#include <stdlib.h>  // para rand()
+#include <stdio.h>   // para printf()
+#define ALTURA_TELA 25
+#define LARGURA_TELA 80
+
+
+
 
 
 void desenharEspaco() {
-    screenSetColor(BLUE, -1); // Fundo escuro para espaço
+    screenSetColor(BLUE, BLACK); // Substitua -1 por BLACK ou outra cor válida
 
     for (int y = 0; y < ALTURA_TELA; y++) {
         screenGotoxy(0, y);
@@ -27,9 +34,10 @@ void desenharEspaco() {
 }
 
 void desenharHUD(int nivel, int vidas) {
-    screenSetColor(YELLOW, -1);
+    screenSetColor(YELLOW, BLACK); // Substitua -1 por BLACK ou outra cor válida
     screenGotoxy(2, 0);
     printf("Nível: %d   Vidas: %d", nivel, vidas);
+}    
     
 void screenDrawBorders() 
 {

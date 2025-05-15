@@ -18,7 +18,7 @@ int direcaoNaves[10] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};  // Direções 
 void exibirMensagem(const char *mensagem, int tempo) {
     screenClear();
     screenGotoxy(MAXX / 2 - strlen(mensagem) / 2, MAXY / 2);
-    screenSetColor(YELLOW, -1);  // Sem fundo
+    screenSetColor(YELLOW, BLACK);  // Substitua -1 por BLACK ou outra cor válida
     printf("%s", mensagem);
     screenUpdate();
     timerDelay(tempo);  // Pausa para exibir a mensagem
@@ -27,7 +27,7 @@ void exibirMensagem(const char *mensagem, int tempo) {
 
 // Função para desenhar a borda ao redor do campo de jogo
 void desenharBorda() {
-    screenSetColor(WHITE, -1);  // Sem fundo
+    screenSetColor(WHITE, BLACK);  // Substitua -1 por BLACK ou outra cor válida
     for (int x = 0; x < MAXX; x++) {
         screenGotoxy(x, 0); printf("#");
         screenGotoxy(x, MAXY - 1); printf("#");
@@ -40,30 +40,30 @@ void desenharBorda() {
 
 // Função para exibir as vidas restantes do jogador
 void exibirVidas() {
-    screenSetColor(YELLOW, -1);  // Sem fundo
+    screenSetColor(YELLOW, BLACK);  // Substitua -1 por BLACK ou outra cor válida
     screenGotoxy(2, 1);
     printf("Vidas: ");
     for (int i = 0; i < 3; i++) {
         if (i < vidas) {
-            screenSetColor(RED, -1);  // Coração vermelho
+            screenSetColor(RED, BLACK);  // Substitua -1 por BLACK ou outra cor válida
             printf("❤️ ");
         } else {
             printf("  ");  // Espaço vazio para vidas perdidas
         }
     }
-    screenSetColor(YELLOW, -1);  // Restaurar cor original
+    screenSetColor(YELLOW, BLACK);  // Substitua -1 por BLACK ou outra cor válida
 }
 
 // Função para desenhar o jogador
 void desenharNave(int x, int y) {
-    screenSetColor(GREEN, -1);  // Sem fundo
+    screenSetColor(GREEN, BLACK);  // Substitua -1 por BLACK ou outra cor válida
     screenGotoxy(x, y);
     printf("🚀");
 }
 
 // Função para desenhar os carros
 void desenharAsteroides() {
-    screenSetColor(WHITE, -1);  // Cor clara para asteroides
+    screenSetColor(WHITE, BLACK);  // Substitua -1 por BLACK ou outra cor válida
     for (int i = 0; i < numNaves; i++) {
         screenGotoxy(navesX[i], linhasNaves[i]);
         
@@ -136,11 +136,10 @@ int main() {
     keyboardInit();
     timerInit(100);
 
-    exibirMensagem("
-    🚀 ASTRO AVOID 🚀
-  ░░░░░░░░░░░░░░░░░░░░░░
-   Desvie de asteroides
-  e atravesse o espaço!", 2);
+    exibirMensagem("ASTRO AVOID\n"
+        "===========================\n"
+        "E atravesse o espaco!", 2);
+
 
     desenharBorda();
     desenharEspaco();               // Fundo

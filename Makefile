@@ -1,26 +1,27 @@
 # Nome do executável
 EXEC = jogo
 
-# Diretórios
-SRC_DIR = src
-INCLUDE_DIR = include
-
 # Compilador e flags
 CC = gcc
-CFLAGS = -Wall -I$(INCLUDE_DIR)
+CFLAGS = -Wall -Wextra -Iinclude
+LDFLAGS = -lncurses
 
-# Arquivos fonte e objetos
-SRCS = $(SRC_DIR)/keyboard.c $(SRC_DIR)/main.c $(SRC_DIR)/screen.c $(SRC_DIR)/timer.c
-OBJS = $(SRCS:.c=.o)
+# Arquivos fonte
+SRCS = src/keyboard.c src/main.c src/screen.c src/timer.c
+OBJS = $(SRCS:src/%.c=%.o)
 
 # Regra padrão
+all: $(EXEC)
+
 $(EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $(EXEC)
+	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
 
 # Regra para compilar arquivos .c em .o
-%.o: %.c
+%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Limpeza
 clean:
 	rm -f $(OBJS) $(EXEC)
+
+.PHONY: all clean
