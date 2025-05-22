@@ -6,9 +6,7 @@
 #define ALTURA_TELA 25
 #define LARGURA_TELA 80
 
-/**
- * Screen Colors type — precisa vir antes de qualquer uso
- */
+
 typedef enum {
     BLACK, RED, GREEN, BROWN, BLUE, MAGENTA, CYAN, LIGHTGRAY,
     DARKGRAY, LIGHTRED, LIGHTGREEN, YELLOW, LIGHTBLUE, 
@@ -24,7 +22,7 @@ void screenGotoxy(int x, int y);
 void screenSetColor(screenColor fg, screenColor bg);
 void screenDrawBorders();
 
-// Terminal control sequences
+
 #define ESC            "\033"
 #define NORMALTEXT     "[0m"
 #define BOLDTEXT       "[1m"
@@ -36,7 +34,6 @@ void screenDrawBorders();
 #define HIDECURSOR     "[?25l"
 #define CLEARSCREEN    "[2J"
 
-// BOX Drawing - Unix like terminals
 #define BOX_ENABLE     "(0"
 #define BOX_DISABLE    "(B"
 #define BOX_VLINE      0x78
@@ -55,7 +52,7 @@ void screenDrawBorders();
 #define BOX_BLOCK      0x61
 #define BOX_DOT        0x7E
 
-// screen constants
+//constantes da tela
 #define SCRSTARTX      3
 #define SCRENDX        75
 #define SCRSTARTY      1
@@ -65,7 +62,7 @@ void screenDrawBorders();
 #define MAXX           80
 #define MAXY           24
 
-// Inline screen helpers
+
 static inline void screenHomeCursor() {
     printf("%s%s", ESC, HOMECURSOR);
 }
@@ -111,4 +108,4 @@ static inline void screenBoxDisable() {
     printf("%s%s", ESC, BOX_DISABLE);
 }
 
-#endif /* __SCREEN_H__ */
+#endif 

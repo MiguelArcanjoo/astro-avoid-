@@ -1,203 +1,232 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <time.h>
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
 
-int jogadorX = 34, jogadorY = MAXY - 2;  // Posição inicial do jogador
-int vidas = 3;
-int nivel = 1;                           // Nível atual do jogo
-int numNaves = 5;                       // Número de "carros" ou obstáculos (aumenta a cada nível)
-int navesX[10] = {15, 35, 55, 25, 45, 20, 40, 60, 30, 50};  // Posições iniciais dos carros
-int linhasNaves[10] = {MAXY / 2, MAXY / 2 + 2, MAXY / 2 - 2, MAXY / 2 + 4, MAXY / 2 - 4};  // Linhas dos carros
-int direcaoNaves[10] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};  // Direções dos carros (-1 = esquerda)
+// Estruturas
+typedef struct {
+    int x;
+    int y;
+    int direcao;
+    char sprite[4]; // Para armazenar emojis
+} Asteroide;
 
-// Função para exibir mensagens temporárias
-void exibirMensagem(const char *mensagem, int tempo) {
+typedef struct {
+    Asteroide* dados; // Lista dinâmica
+    int quantidade;
+    int capacidade;
+} ListaAsteroides;
+
+typedef struct {
+    int x, y;
+    int vidas;
+    int nivel;
+    int pontuacao;
+} Jogador;
+
+// Variáveis globais
+Jogador jogador;
+ListaAsteroides asteroides;
+const char* sprites[5] = {"🪨", "☄️", "🛰️", "🛸", "🪐"};
+
+// Funções para lista de asteroides
+void inicializarLista(ListaAsteroides* lista, int capacidade) {
+    lista->dados = (Asteroide*)malloc(capacidade * sizeof(Asteroide));
+    lista->quantidade = 0;
+    lista->capacidade = capacidade;
+}
+
+void adicionarAsteroide(ListaAsteroides* lista, Asteroide ast) {
+    if (lista->quantidade < lista->capacidade) {
+        lista->dados[lista->quantidade++] = ast;
+    }
+}
+
+void liberarLista(ListaAsteroides* lista) {
+    free(lista->dados);
+    lista->quantidade = lista->capacidade = 0;
+}
+
+// Funções para arquivos
+void salvarPontuacao(int pontuacao) {
+    FILE* arquivo = fopen("pontuacoes.dat", "ab");
+    if (arquivo) {
+        fwrite(&pontuacao, sizeof(int), 1, arquivo);
+        fclose(arquivo);
+    }
+}
+
+int carregarMelhorPontuacao() {
+    FILE* arquivo = fopen("pontuacoes.dat", "rb");
+    int melhor = 0, atual;
+    if (arquivo) {
+        while (fread(&atual, sizeof(int), 1, arquivo)) {
+            if (atual > melhor) melhor = atual;
+        }
+        fclose(arquivo);
+    }
+    return melhor;
+}
+
+void resetarPosicaoJogador() {
+    jogador.x = MAXX / 2;
+    jogador.y = MAXY - 2;
+}
+
+void inicializarJogo() {
+    // Jogador começa com 3 vidas
+    resetarPosicaoJogador();
+    jogador.vidas = 3;
+    jogador.nivel = 1;
+    jogador.pontuacao = 0;
+
+    // Inicializa asteroides
+    inicializarLista(&asteroides, 20);
+
+    // Adiciona asteroides iniciais
+    for (int i = 0; i < 3 + jogador.nivel; i++) {
+        Asteroide ast = {
+            .x = rand() % (MAXX - 3) + 1,
+            .y = rand() % (MAXY / 2) + 1,
+            .direcao = (rand() % 2) ? 1 : -1
+        };
+        strcpy(ast.sprite, sprites[rand() % 5]);
+        adicionarAsteroide(&asteroides, ast);
+    }
+}
+
+void desenharJogo() {
     screenClear();
-    screenGotoxy(MAXX / 2 - strlen(mensagem) / 2, MAXY / 2);
-    screenSetColor(YELLOW, BLACK);  // Substitua -1 por BLACK ou outra cor válida
-    printf("%s", mensagem);
+    desenharEspaco();
+    
+    // Desenha asteroides
+    Asteroide* ast = asteroides.dados;
+    for (int i = 0; i < asteroides.quantidade; i++, ast++) {
+        screenGotoxy(ast->x, ast->y);
+        printf("%s", ast->sprite);
+    }
+    
+    // Desenha jogador
+    screenGotoxy(jogador.x, jogador.y);
+    screenSetColor(GREEN, BLACK);
+    printf("▲");
+    
+    desenharHUD(jogador.nivel, jogador.vidas);
     screenUpdate();
-    timerDelay(tempo);  // Pausa para exibir a mensagem
-    screenClear();
 }
 
-// Função para desenhar a borda ao redor do campo de jogo
-void desenharBorda() {
-    screenSetColor(WHITE, BLACK);  // Substitua -1 por BLACK ou outra cor válida
-    for (int x = 0; x < MAXX; x++) {
-        screenGotoxy(x, 0); printf("#");
-        screenGotoxy(x, MAXY - 1); printf("#");
-    }
-    for (int y = 0; y < MAXY; y++) {
-        screenGotoxy(0, y); printf("#");
-        screenGotoxy(MAXX - 1, y); printf("#");
+void atualizarAsteroides() {
+    Asteroide* ast = asteroides.dados;
+    for (int i = 0; i < asteroides.quantidade; i++, ast++) {
+        ast->x += ast->direcao;
+        if (ast->x <= 1) ast->x = MAXX - 3;
+        if (ast->x >= MAXX - 2) ast->x = 1;
     }
 }
 
-// Função para exibir as vidas restantes do jogador
-void exibirVidas() {
-    screenSetColor(YELLOW, BLACK);  // Substitua -1 por BLACK ou outra cor válida
-    screenGotoxy(2, 1);
-    printf("Vidas: ");
-    for (int i = 0; i < 3; i++) {
-        if (i < vidas) {
-            screenSetColor(RED, BLACK);  // Substitua -1 por BLACK ou outra cor válida
-            printf("❤️ ");
-        } else {
-            printf("  ");  // Espaço vazio para vidas perdidas
-        }
-    }
-    screenSetColor(YELLOW, BLACK);  // Substitua -1 por BLACK ou outra cor válida
-}
-
-// Função para desenhar o jogador
-void desenharNave(int x, int y) {
-    screenSetColor(GREEN, BLACK);  // Substitua -1 por BLACK ou outra cor válida
-    screenGotoxy(x, y);
-    printf("🚀");
-}
-
-// Função para desenhar os carros
-void desenharAsteroides() {
-    screenSetColor(WHITE, BLACK);  // Substitua -1 por BLACK ou outra cor válida
-    for (int i = 0; i < numNaves; i++) {
-        screenGotoxy(navesX[i], linhasNaves[i]);
-        
-        if (nivel == 1) {
-            printf(i % 3 == 0 ? "🪨" : i % 3 == 1 ? "☄️" : "🛰️");
-        } else if (nivel == 2) {
-            printf(i % 3 == 0 ? "☄️" : i % 3 == 1 ? "🛸" : "🪐");
-        } else if (nivel == 3) {
-            printf(i % 3 == 0 ? "🌑" : i % 3 == 1 ? "🪐" : "🛰️");
-        } else if (nivel == 4) {
-            printf(i % 3 == 0 ? "🛸" : i % 3 == 1 ? "🪨" : "☄️");
-        } else {
-            switch (i % 10) {
-                case 0: printf("🪨"); break;
-                case 1: printf("☄️"); break;
-                case 2: printf("🛰️"); break;
-                case 3: printf("🛸"); break;
-                case 4: printf("🪐"); break;
-                case 5: printf("🌑"); break;
-                case 6: printf("☄️"); break;
-                case 7: printf("🛸"); break;
-                case 8: printf("🪨"); break;
-                case 9: printf("🛰️"); break;
-            }
-        }
-    }
-}
-
-// Função para limpar o jogador na posição anterior
-void limparJogador(int x, int y) {
-    screenGotoxy(x, y);
-    printf(" ");
-}
-
-// Função para atualizar a posição dos carros
-void atualizarNaves() {
-    for (int i = 0; i < numNaves; i++) {
-        screenGotoxy(navesX[i], linhasNaves[i]);
-        printf("   ");  // Limpa a posição anterior do carro
-        navesX[i] += direcaoNaves[i];
-        if (navesX[i] <= 1) {
-            navesX[i] = MAXX - 3;  // Reaparece do outro lado
-        }
-    }
-}
-
-// Função para verificar colisão entre jogador e carro
 int verificarColisao() {
-    for (int i = 0; i < numNaves; i++) {
-        if (jogadorY == linhasNaves[i] && jogadorX >= navesX[i] && jogadorX <= navesX[i] + 2) {
-            return 1;  // Colisão detectada
+    Asteroide* ast = asteroides.dados;
+    for (int i = 0; i < asteroides.quantidade; i++, ast++) {
+        if (jogador.y == ast->y && jogador.x >= ast->x && jogador.x <= ast->x + 2) {
+            return 1;
         }
     }
     return 0;
 }
 
-// Função para mover o jogador de acordo com a entrada do usuário
-void moverJogador(int tecla) {
-    limparJogador(jogadorX, jogadorY);  // Limpa a posição anterior do jogador
-    if (tecla == 'w' && jogadorY > 1) jogadorY--;         // Move para cima
-    if (tecla == 's' && jogadorY < MAXY - 2) jogadorY++;  // Move para baixo
-    if (tecla == 'a' && jogadorX > 1) jogadorX--;         // Move para esquerda
-    if (tecla == 'd' && jogadorX < MAXX - 2) jogadorX++;  // Move para direita
-    desenharNave(jogadorX, jogadorY);
+void proximoNivel() {
+    jogador.nivel++;
+    jogador.pontuacao += jogador.nivel * 100;
+    liberarLista(&asteroides);
+    inicializarLista(&asteroides, 20);
+    
+    // Adiciona mais asteroides
+    for (int i = 0; i < 3 + jogador.nivel; i++) {
+        Asteroide ast = {
+            .x = rand() % (MAXX - 3) + 1,
+            .y = rand() % (MAXY / 2) + 1,
+            .direcao = (rand() % 2) ? 1 : -1
+        };
+        strcpy(ast.sprite, sprites[rand() % 5]);
+        adicionarAsteroide(&asteroides, ast);
+    }
+    
+    resetarPosicaoJogador();
+    
+    // Mostra mensagem
+    screenClear();
+    screenGotoxy(MAXX/2 - 10, MAXY/2);
+    printf("NOVO NÍVEL %d!", jogador.nivel);
+    screenUpdate();
+    timerDelay(2);
+}
+
+void fimDeJogo() {
+    salvarPontuacao(jogador.pontuacao);
+    screenClear();
+    screenGotoxy(MAXX/2 - 10, MAXY/2);
+    printf("FIM DE JOGO! Pontuação: %d", jogador.pontuacao);
+    screenGotoxy(MAXX/2 - 10, MAXY/2 + 1);
+    printf("Melhor pontuação: %d", carregarMelhorPontuacao());
+    screenUpdate();
+    timerDelay(3);
 }
 
 int main() {
-    int tecla = 0;
+    srand(time(NULL));
     screenInit(1);
     keyboardInit();
     timerInit(100);
-
-    exibirMensagem("ASTRO AVOID\n"
-        "===========================\n"
-        "E atravesse o espaco!", 2);
-
-
-    desenharBorda();
-    desenharEspaco();               // Fundo
-    desenharNave(jogadorX, jogadorY); // Jogador  
-    desenharHUD(nivel, vidas);      // Informações do jogo
-    desenharAsteroides();          // Obstáculos
-    exibirVidas();
-    screenUpdate();
-
+    
+    inicializarJogo();
+    desenharJogo();
+    
+    int tecla;
     while (1) {
         if (keyhit()) {
             tecla = readch();
-            if (tecla == 27) break;  // Tecla Esc para sair
-            moverJogador(tecla);
-            screenUpdate();
+            if (tecla == 27) break; // Tecla ESC para sair
+            
+            // Movimentação do jogador
+            if (tecla == 'w') jogador.y--;
+            if (tecla == 's') jogador.y++;
+            if (tecla == 'a') jogador.x--;
+            if (tecla == 'd') jogador.x++;
+            
+            // Limites da tela
+            if (jogador.x < 1) jogador.x = 1;
+            if (jogador.x > MAXX - 2) jogador.x = MAXX - 2;
+            if (jogador.y < 1) jogador.y = 1;
+            if (jogador.y > MAXY - 2) jogador.y = MAXY - 2;
+            
+            // Verifica se chegou no topo
+            if (jogador.y == 1) {
+                proximoNivel();
+            }
         }
-
+        
         if (timerTimeOver()) {
-            atualizarNaves();
-            desenharAsteroides();
-            desenharBorda();
-            exibirVidas();
-
+            atualizarAsteroides();
+            
             if (verificarColisao()) {
-                vidas--;
-                exibirVidas();
-                if (vidas > 0) {
-                    exibirMensagem("Colisão! Vidas restantes: ", 2);
-                    jogadorX = 34;
-                    jogadorY = MAXY - 2;  // Reset posição inicial do jogador
-                    desenharNave(jogadorX, jogadorY);
-                } else {
-                    exibirMensagem("Game Over! Pressione ESC para sair.", 3);
+                jogador.vidas--;
+                if (jogador.vidas <= 0) {
+                    fimDeJogo();
                     break;
                 }
+                resetarPosicaoJogador();
             }
-
-            if (jogadorY == 1) {  // Verifica se o jogador chegou ao topo
-                nivel++;
-                numNaves += 2;  // Aumenta o número de carros a cada nível
-                exibirMensagem("Parabéns! Próximo Nível", 2);
-
-                for (int i = 0; i < numNaves; i++) {
-                    navesX[i] = (i * 10) % (MAXX - 3);
-                    linhasNaves[i] = MAXY / 2 + (i % 5) * 2;
-                }
-
-                jogadorX = 34;
-                jogadorY = MAXY - 2;
-                desenharNave(jogadorX, jogadorY);
-            }
-            screenUpdate();
+            
+            desenharJogo();
         }
     }
-
+    
+    liberarLista(&asteroides);
     keyboardDestroy();
     screenDestroy();
     timerDestroy();
-
     return 0;
 }

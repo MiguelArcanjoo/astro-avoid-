@@ -1,13 +1,7 @@
-/**
- * screen.c
- * Created on Aug, 23th 2023
- * Author: Tiago Barros
- * Based on "From C to C++ course - 2002"
-*/
 
 #include "screen.h"
-#include <stdlib.h>  // para rand()
-#include <stdio.h>   // para printf()
+#include <stdlib.h>  
+#include <stdio.h>   
 #define ALTURA_TELA 25
 #define LARGURA_TELA 80
 
@@ -16,8 +10,7 @@
 
 
 void desenharEspaco() {
-    screenSetColor(BLUE, BLACK); // Substitua -1 por BLACK ou outra cor válida
-
+    screenSetColor(BLUE, BLACK); 
     for (int y = 0; y < ALTURA_TELA; y++) {
         screenGotoxy(0, y);
         for (int x = 0; x < LARGURA_TELA; x++) {
@@ -34,7 +27,7 @@ void desenharEspaco() {
 }
 
 void desenharHUD(int nivel, int vidas) {
-    screenSetColor(YELLOW, BLACK); // Substitua -1 por BLACK ou outra cor válida
+    screenSetColor(YELLOW, BLACK); 
     screenGotoxy(2, 0);
     printf("Nível: %d   Vidas: %d", nivel, vidas);
 }    
@@ -90,7 +83,7 @@ void screenInit(int drawBorders)
 
 void screenDestroy()
 {
-    printf("%s[0;39;49m", ESC); // Reset colors
+    printf("%s[0;39;49m", ESC); // Resetar cores
     screenSetNormal();
     screenClear();
     screenHomeCursor();

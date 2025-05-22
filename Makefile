@@ -1,5 +1,5 @@
 # Nome do executável
-EXEC = jogo
+EXEC = astro-avoid
 
 # Compilador e flags
 CC = gcc

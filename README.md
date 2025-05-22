@@ -45,22 +45,43 @@ Astro Avoid é um jogo terminal inspirado no estilo retrô de arcade e na mecân
 
 - Editor de texto ou IDE (recomendado: VSCode com extensão C/C++)
 
+- Talvez precise Instalar o libncurses-dev (ou equivalente)
+ Se estiver usando Linux (Ubuntu, Debian, etc):
+  Execute no terminal:
+  sudo apt update
+  sudo apt install libncurses5-dev libncursesw5-dev
+  Se estiver usando macOS com Homebrew:
+  brew install ncurses
 
 🏁 Como Executar
+
 🔹 Passo 1:
-- Clonar esse repositório : git clone https://github.com/MiguelArcanjoo/astro-avoid-
+- Clonar esse repositório: 
+  ```bash
+  git clone https://github.com/MiguelArcanjoo/astro-avoid
+
 
 🔹 Passo 2:
 - Navegar até o diretório do jogo (o caminho pode precisar de ajuste): cd astro-avoid
 
-🔹 Passo 3:
-- Compilar o código: gcc ./src/*.c -I./include -o AstroAvoid
+🔹Passo 3 (recomendado):
+
+  -Compilar o código com Makefile:
+    make
+
+🔹 Alternativa:
+
+  -Compilar manualmente:
+  gcc ./src/*.c -I./include -o astroavoid
 
 🔹 Passo 4:
-- Executar o jogo: ./astroavoid
+
+  -Executar o jogo:
+  ./astroavoid
 
 
 👩‍💻 Membros
+
 
 <ul>
   <li>
