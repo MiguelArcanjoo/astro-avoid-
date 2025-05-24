@@ -11,9 +11,9 @@
 
 void desenharEspaco() {
     screenSetColor(BLUE, BLACK); 
-    for (int y = 0; y < ALTURA_TELA; y++) {
+    for (int y = 0; y < ALTURA_TELA; y++){
         screenGotoxy(0, y);
-        for (int x = 0; x < LARGURA_TELA; x++) {
+        for (int x = 0; x < LARGURA_TELA; x++){
             int tipo = rand() % 100;
             if (tipo < 2) {
                 printf(".");  // estrela pequena
@@ -26,7 +26,7 @@ void desenharEspaco() {
     }
 }
 
-void desenharHUD(int nivel, int vidas) {
+void desenharHUD(int nivel, int vidas){
     screenSetColor(YELLOW, BLACK); 
     screenGotoxy(2, 0);
     printf("Nível: %d   Vidas: %d", nivel, vidas);
@@ -83,7 +83,7 @@ void screenInit(int drawBorders)
 
 void screenDestroy()
 {
-    printf("%s[0;39;49m", ESC); // Resetar cores
+    printf("%s[0;39;49m", ESC); // resetar cores
     screenSetNormal();
     screenClear();
     screenHomeCursor();

@@ -13,7 +13,7 @@ typedef enum {
     LIGHTMAGENTA, LIGHTCYAN, WHITE
 } screenColor;
 
-// Funções da tela
+//funções da tela
 void desenharEspaco();
 void desenharHUD(int nivel, int vidas);
 void screenInit(int drawBorders);
@@ -63,48 +63,48 @@ void screenDrawBorders();
 #define MAXY           24
 
 
-static inline void screenHomeCursor() {
+static inline void screenHomeCursor(){
     printf("%s%s", ESC, HOMECURSOR);
 }
 
-static inline void screenShowCursor() {
+static inline void screenShowCursor(){
     printf("%s%s", ESC, SHOWCURSOR);
 }
 
-static inline void screenHideCursor() {
+static inline void screenHideCursor(){
     printf("%s%s", ESC, HIDECURSOR);
 }
 
-static inline void screenClear() {
+static inline void screenClear(){
     screenHomeCursor();
     printf("%s%s", ESC, CLEARSCREEN);
 }
 
-static inline void screenUpdate() {
+static inline void screenUpdate(){
     fflush(stdout);
 }
 
-static inline void screenSetNormal() {
+static inline void screenSetNormal(){
     printf("%s%s", ESC, NORMALTEXT);
 }
 
-static inline void screenSetBold() {
+static inline void screenSetBold(){
     printf("%s%s", ESC, BOLDTEXT);
 }
 
-static inline void screenSetBlink() {
+static inline void screenSetBlink(){
     printf("%s%s", ESC, BLINKTEXT);
 }
 
-static inline void screenSetReverse() {
+static inline void screenSetReverse(){
     printf("%s%s", ESC, REVERSETEXT);
 }
 
-static inline void screenBoxEnable() {
+static inline void screenBoxEnable(){
     printf("%s%s", ESC, BOX_ENABLE);
 }
 
-static inline void screenBoxDisable() {
+static inline void screenBoxDisable(){
     printf("%s%s", ESC, BOX_DISABLE);
 }
 

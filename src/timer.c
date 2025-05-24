@@ -2,7 +2,7 @@
 #include "timer.h"
 #include <sys/time.h>
 #include <stdio.h>
-#include <unistd.h>  // Inclui a função sleep() para pausas em segundos
+#include <unistd.h>  //inclui a função sleep() para pausas em segundos
 
 
 
@@ -51,7 +51,7 @@ void timerPrint()
     printf("Timer:  %d", getTimeDiff());
 }
 void timerDelay(int segundos) {
-    sleep(segundos);  // Pausa a execução por "segundos" segundos
+    sleep(segundos);  //pausa a execução por "segundos" segundos
 }
 
 

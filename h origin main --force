@@ -1,0 +1,17 @@
+[33mcommit ecbfb673bce1bc0db1870f3ed80eb20ebb7b0923[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: biagalindo <biagalindo4@gmail.com>
+Date:   Thu May 22 15:42:32 2025 -0300
+
+    Versão finaal do jogo funcionando
+
+[33mcommit aaddfd9371132660ad98f207226ef945bd1600ef[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: biagalindo <biagalindo4@gmail.com>
+Date:   Thu May 15 10:38:44 2025 -0300
+
+    Jogo ja com meteoro funcionando
+
+[33mcommit e7b5cdec5419f44d3900ebafe17103d7d07ce9cb[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: MiguelArcanjoo <maha@cesar.school>
+Date:   Tue May 13 08:54:55 2025 -0300
+
+    🎮 Astro Avoid: estrutura inicial
