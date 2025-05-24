@@ -80,6 +80,11 @@ Astro Avoid é um jogo terminal inspirado no estilo retrô de arcade e na mecân
   ./astroavoid
 
 
+🕹️ Gameplay
+
+https://github.com/user-attachments/assets/ea1b114a-46cf-45c5-85df-89e70628386b
+
+
 👩‍💻 Membros
 
 
